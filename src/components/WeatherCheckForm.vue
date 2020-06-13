@@ -35,13 +35,16 @@ export default Vue.extend({
    methods: {
       handleSubmit(e: Event) {
          e.preventDefault();
+
          if (!this.form.city && this.hasCoords) {
             return this.$store.dispatch("weather/getWeatherByCoords");
          }
          if (this.form.city) {
-            return this.$store.dispatch("weather/getWeatherByCity", {
+            this.$store.dispatch("weather/getWeatherByCity", {
                city: this.form.city
             });
+            this.form.city = "";
+            return;
          }
       }
    }

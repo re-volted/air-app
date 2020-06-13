@@ -6,12 +6,15 @@ import { WeatherState } from "./types";
 import { RootState } from "../types";
 
 export const state: WeatherState = {
+   errorMsg: "",
    coords: {
       lat: null,
       lon: null
    },
+   temperature: null,
+   date: "",
    city: "",
-   date: ""
+   description: ""
 };
 
 const namespaced = true;

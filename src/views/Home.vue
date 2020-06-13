@@ -4,6 +4,10 @@
          <app-header msg="AirApp" />
          <weather-check-form />
          <weather-panel />
+         <p v-if="geoErrMsg" class="error-message">{{ geoErrMsg }}</p>
+         <p v-else-if="errorMsg" class="error-message">
+            An error occurred while fetching data: "{{ errorMsg }}"
+         </p>
       </div>
    </div>
 </template>
@@ -23,12 +27,12 @@ export default {
    data: function() {
       return {
          gettingLocation: false,
-         errorStr: null
+         geoErrMsg: null
       };
    },
    mounted() {
       if (!("geolocation" in navigator)) {
-         this.errorStr = "Geolocation not available.";
+         this.geoErrMsg = "Geolocation not available.";
          return;
       }
 
@@ -37,21 +41,23 @@ export default {
       // get position
       navigator.geolocation.getCurrentPosition(
          pos => {
+            this.geoErrMsg = null;
             this.gettingLocation = false;
             this.$store.dispatch("weather/saveGeoCoords", {
                lat: pos.coords.latitude,
                lon: pos.coords.longitude
             });
+            return this.$store.dispatch("weather/getWeatherByCoords");
          },
          err => {
             this.gettingLocation = false;
-            this.errorStr = err.message;
+            this.geoErrMsg = err.message;
          }
       );
    },
    computed: {
-      city() {
-         return this.$store.state.city;
+      errorMsg() {
+         return this.$store.state.weather.errorMsg;
       }
    }
 };

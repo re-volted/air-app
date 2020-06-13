@@ -2,8 +2,22 @@ import { MutationTree } from "vuex";
 import { WeatherState } from "./types";
 
 export const mutations: MutationTree<WeatherState> = {
-   setCity(state, city: string) {
-      state.city = city;
+   resetData(state) {
+      state.errorMsg = "";
+      state.temperature = null;
+      state.date = "";
+      state.city = "";
+      state.description = "";
+   },
+   setErrorMsg(state, message: string) {
+      state.errorMsg = message;
+   },
+   setCoords(state, data: { lat: number; lon: number }) {
+      state.coords.lat = data.lat;
+      state.coords.lon = data.lon;
+   },
+   setTemp(state, temp: number) {
+      state.temperature = temp;
    },
    setDate(state) {
       const date = new Date();
@@ -16,8 +30,10 @@ export const mutations: MutationTree<WeatherState> = {
 
       state.date = `${day}.${month}.${year}`;
    },
-   setCoords(state, data: { lat: number; lon: number }) {
-      state.coords.lat = data.lat;
-      state.coords.lon = data.lon;
+   setCity(state, city: string) {
+      state.city = city;
+   },
+   setDescription(state, description: string) {
+      state.description = description;
    }
 };

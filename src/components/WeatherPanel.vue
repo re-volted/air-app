@@ -1,5 +1,5 @@
 <template>
-   <div v-show="weatherData" class="weather-panel">
+   <div v-if="weatherData" class="weather-panel">
       <div class="weather-panel__temperature">
          <p>{{ temperature }}</p>
       </div>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { formatTemp } from "@/utils/formatting";
+import { formatTemperature } from "@/utils/formatting";
 
 export default Vue.extend({
    data: () => {
@@ -27,19 +27,24 @@ export default Vue.extend({
    },
    computed: {
       weatherData(): boolean {
-         return !!this.$store.state.weather.city;
+         return !!(
+            this.$store.state.weather.temperature &&
+            this.$store.state.weather.description &&
+            this.$store.state.weather.city &&
+            this.$store.state.weather.date
+         );
       },
       temperature(): string {
-         return formatTemp(29.6);
+         return formatTemperature(this.$store.state.weather.temperature);
       },
-      date(): string {
-         return this.$store.state.weather.date;
+      description(): string {
+         return this.$store.state.weather.description;
       },
       location(): string {
          return this.$store.state.weather.city;
       },
-      description(): string {
-         return `mostly sunny`;
+      date(): string {
+         return this.$store.state.weather.date;
       }
    }
 });

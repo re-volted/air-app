@@ -1,10 +1,13 @@
 export interface WeatherState {
+   errorMsg: string;
    coords: {
       lat: Coord;
       lon: Coord;
    };
-   city: string;
+   temperature: number | null;
    date: string;
+   city: string;
+   description: string;
 }
 
 type Coord = number | null;

@@ -1,16 +1,12 @@
 import { MutationTree } from "vuex";
-import { WeatherState } from "./types";
+import { WeatherState, SingleApiRecord } from "./types";
 
 export const mutations: MutationTree<WeatherState> = {
    RESET_DATA(state) {
-      state.errorMsg = "";
       state.temperature = null;
       state.date = "";
       state.city = "";
       state.description = "";
-   },
-   SET_ERROR_MSG(state, message: string) {
-      state.errorMsg = message;
    },
    SET_COORDS(state, data: { lat: number; lon: number }) {
       state.coords.lat = data.lat;
@@ -35,6 +31,27 @@ export const mutations: MutationTree<WeatherState> = {
    },
    SET_DESCRIPTION(state, description: string) {
       state.description = description;
+   },
+   SET_FORECAST_DATA(state, data) {
+      const rawData = data;
+      const filteredData = rawData.filter((set: SingleApiRecord) => {
+         const timestamp = set.dt;
+         const date = new Date(timestamp * 1000);
+         return date.getDate() === Number(state.date.split(".")[0]);
+      });
+      const mappedData = filteredData.map((set: SingleApiRecord) => {
+         const date = new Date(set.dt * 1000);
+         return {
+            hour: `${date.getHours()}:${
+               date.getMinutes() < 10
+                  ? "0" + date.getMinutes()
+                  : date.getMinutes()
+            }`,
+            temperature: Math.round(set.main.temp),
+            description: set.weather[0].description
+         };
+      });
+      state.forecast = mappedData;
    },
    TOGGLE_TEMP_UNITS(state) {
       if (state.tempUnits === "C") {

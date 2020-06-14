@@ -1,12 +1,21 @@
 <template>
    <form @submit="handleSubmit" class="weather-check-form" method="get">
-      <input
+      <vue-google-autocomplete
+         ref="autocomplete"
+         id="city"
+         classname="weather-check-form__input"
+         placeholder="Enter a city name..."
+         @placechanged="updateOnPlaceChange"
+      >
+      </vue-google-autocomplete>
+      <!-- <input
          type="search"
          name="city"
          id="city"
          class="weather-check-form__input"
+         placeholder="Enter a city name..."
          v-model="form.city"
-      />
+      /> -->
       <button type="submit" class="weather-check-form__btn">
          Check!
       </button>
@@ -15,6 +24,8 @@
 
 <script lang="ts">
 import Vue from "vue";
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+
 export default Vue.extend({
    name: "WeatherCheckForm",
    data: () => {
@@ -23,6 +34,9 @@ export default Vue.extend({
             city: ""
          }
       };
+   },
+   components: {
+      VueGoogleAutocomplete
    },
    computed: {
       hasCoords(): boolean {
@@ -36,15 +50,46 @@ export default Vue.extend({
       handleSubmit(e: Event) {
          e.preventDefault();
 
-         if (!this.form.city && this.hasCoords) {
-            return this.$store.dispatch("weather/getWeatherByCoords");
-         }
          if (this.form.city) {
             this.$store.dispatch("weather/getWeatherByCity", {
                city: this.form.city
             });
+
+            if (this.$refs.autocomplete) {
+               const input = this.$refs.autocomplete as VueGoogleAutocomplete;
+               input.clear();
+            }
+
             this.form.city = "";
             return;
+         }
+
+         if (this.hasCoords) {
+            return this.$store.dispatch("weather/getWeatherByCoords");
+         } else {
+            this.$store.commit(
+               "SET_ERROR_MSG",
+               "Coordinates not available. Please, provide a city name."
+            );
+         }
+      },
+      updateOnPlaceChange(e: {
+         locality?: string;
+         latitude?: number;
+         longitude?: number;
+      }) {
+         if (e.locality) {
+            this.form.city = e.locality;
+         } else if (e.latitude && e.longitude) {
+            this.$store.commit("weather/SET_COORDS", {
+               lat: e.latitude,
+               lon: e.longitude
+            });
+         } else {
+            this.$store.commit(
+               "SET_ERROR_MSG",
+               "Google API doesn't provide enough information about this place to fetch weather data. Please, try something else."
+            );
          }
       }
    }

@@ -14,13 +14,14 @@
             <p><span>Description:</span> {{ description }}</p>
          </div>
       </div>
-      <router-link to="/about" class="weather-panel__more">More</router-link>
+      <router-link to="/details" class="weather-panel__more">More</router-link>
    </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { formatTemperature } from "@/utils/formatting";
+import { TempUnit } from "@/store/weather/types";
 
 export default Vue.extend({
    data: () => {
@@ -30,10 +31,13 @@ export default Vue.extend({
       hasWeatherData(): boolean {
          return this.$store.getters["weather/isDataFetched"];
       },
+      tempUnits(): TempUnit {
+         return this.$store.state.weather.tempUnits;
+      },
       temperature(): string {
          return formatTemperature(
             this.$store.state.weather.temperature,
-            this.$store.state.weather.tempUnits
+            this.tempUnits
          );
       },
       description(): string {

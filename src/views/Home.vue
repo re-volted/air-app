@@ -4,65 +4,30 @@
          <app-header />
          <weather-check-form />
          <weather-panel />
-         <p v-if="geoErrMsg" class="error-message">{{ geoErrMsg }}</p>
-         <p v-else-if="errorMsg" class="error-message">
+         <p v-if="errorMsg" class="error-message">
             An error occurred while fetching data: "{{ errorMsg }}"
          </p>
       </div>
    </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import AppHeader from "@/components/AppHeader.vue";
 import WeatherCheckForm from "@/components/WeatherCheckForm.vue";
 import WeatherPanel from "@/components/WeatherPanel.vue";
 
-export default {
+export default Vue.extend({
    name: "Home",
    components: {
       AppHeader,
       WeatherCheckForm,
       WeatherPanel
    },
-   data: function() {
-      return {
-         gettingLocation: false,
-         geoErrMsg: null
-      };
-   },
-   mounted() {
-      if (!("geolocation" in navigator)) {
-         this.geoErrMsg = "Geolocation not available.";
-         return;
-      }
-
-      this.gettingLocation = true;
-
-      // get position
-      navigator.geolocation.getCurrentPosition(
-         pos => {
-            this.geoErrMsg = null;
-            this.gettingLocation = false;
-            if (!this.$store.getters["weather/hasCoords"]) {
-               this.$store.dispatch("weather/saveGeoCoords", {
-                  lat: pos.coords.latitude,
-                  lon: pos.coords.longitude
-               });
-            }
-            if (!this.$store.getters["weather/isDataFetched"]) {
-               return this.$store.dispatch("weather/getWeatherByCoords");
-            }
-         },
-         err => {
-            this.gettingLocation = false;
-            this.geoErrMsg = err.message;
-         }
-      );
-   },
    computed: {
-      errorMsg() {
-         return this.$store.state.weather.errorMsg;
+      errorMsg(): string {
+         return this.$store.state.errorMsg as string;
       }
    }
-};
+});
 </script>

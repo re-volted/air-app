@@ -9,8 +9,12 @@ export const actions: ActionTree<WeatherState, RootState> = {
       commit("SET_COORDS", { lat, lon });
    },
    getWeatherByCoords({ state, commit }) {
-      commit("RESET_DATA");
-      if (!state.coords.lat || !state.coords.lon) return;
+      commit("SET_LOADING", true, { root: true });
+      commit("SET_ERROR_MSG", "", { root: true });
+
+      if (!state.coords.lat || !state.coords.lon) {
+         throw Error("Coordinates unavailable. Unable to fetch data.");
+      }
       axios
          .get(buildUrl({ lat: state.coords.lat, lon: state.coords.lon }))
          .then(res => {
@@ -25,18 +29,27 @@ export const actions: ActionTree<WeatherState, RootState> = {
                   "SET_CITY",
                   `${res.data.city.name}, ${res.data.city.country}`
                );
+
+               commit("SET_LOADING", false, { root: true });
+               commit("SET_FORECAST_DATA", res.data.list);
             }
          })
          .catch(err => {
+            commit("SET_LOADING", false, { root: true });
             if (err.response) {
-               commit("SET_ERROR_MSG", err.response.data.message);
+               commit("SET_ERROR_MSG", err.response.data.message, {
+                  root: true
+               });
             } else if (err.request) {
-               commit("SET_ERROR_MSG", err.request.data.message);
+               commit("SET_ERROR_MSG", err.request.data.message, {
+                  root: true
+               });
             }
          });
    },
    getWeatherByCity({ commit }, { city }) {
-      commit("RESET_DATA");
+      commit("SET_LOADING", true, { root: true });
+      commit("SET_ERROR_MSG", "", { root: true });
       axios
          .get(buildUrl({ city }))
          .then(res => {
@@ -51,13 +64,21 @@ export const actions: ActionTree<WeatherState, RootState> = {
                   "SET_CITY",
                   `${res.data.city.name}, ${res.data.city.country}`
                );
+
+               commit("SET_LOADING", false, { root: true });
+               commit("SET_FORECAST_DATA", res.data.list);
             }
          })
          .catch(err => {
+            commit("SET_LOADING", false, { root: true });
             if (err.response) {
-               commit("SET_ERROR_MSG", err.response.data.message);
+               commit("SET_ERROR_MSG", err.response.data.message, {
+                  root: true
+               });
             } else if (err.request) {
-               commit("SET_ERROR_MSG", err.request.data.message);
+               commit("SET_ERROR_MSG", err.request.data.message, {
+                  root: true
+               });
             }
          });
    }

@@ -5,7 +5,7 @@ function buildUrl(params: ApiCallParams): string {
    let url;
 
    switch (true) {
-      case !!(params.lat && params.lon):
+      case !!params.lat && !!params.lon:
          url = `${api.url}&lat=${params.lat}&lon=${params.lon}&appid=${api.key}`;
          break;
       case !!params.city:

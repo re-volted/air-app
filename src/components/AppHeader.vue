@@ -2,7 +2,7 @@
    <div class="header">
       <div class="header__logo">
          <svgIcon icon="weather" height="50px" width="50px" color="#fff" />
-         <h1 class="header__title">{{ msg }}</h1>
+         <h1 class="header__title">{{ appName }}</h1>
       </div>
       <p class="text--light">Check the weather!</p>
       <p class="text--light">
@@ -19,8 +19,10 @@ import svgIcon from "@/components/svgIcons/svgIcon.vue";
 export default Vue.extend({
    name: "AppHeader",
    components: { svgIcon },
-   props: {
-      msg: String
+   computed: {
+      appName() {
+         return this.$store.getters["getAppName"];
+      }
    }
 });
 </script>

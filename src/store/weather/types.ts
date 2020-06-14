@@ -5,6 +5,7 @@ export interface WeatherState {
       lon: Coord;
    };
    temperature: number | null;
+   tempUnits: "C" | "F";
    date: string;
    city: string;
    description: string;

@@ -3,7 +3,15 @@ import { WeatherState } from "./types";
 import { RootState } from "../types";
 
 export const getters: GetterTree<WeatherState, RootState> = {
-   getCurrentTemp(): number {
-      return 29;
+   hasCoords(state): boolean {
+      return !!state.coords.lat && !!state.coords.lon;
+   },
+   isDataFetched(state): boolean {
+      return (
+         !!state.temperature &&
+         !!state.description &&
+         !!state.city &&
+         !!state.date
+      );
    }
 };

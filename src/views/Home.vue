@@ -1,7 +1,7 @@
 <template>
    <div class="container">
       <div class="home">
-         <app-header msg="AirApp" />
+         <app-header />
          <weather-check-form />
          <weather-panel />
          <p v-if="geoErrMsg" class="error-message">{{ geoErrMsg }}</p>
@@ -43,11 +43,15 @@ export default {
          pos => {
             this.geoErrMsg = null;
             this.gettingLocation = false;
-            this.$store.dispatch("weather/saveGeoCoords", {
-               lat: pos.coords.latitude,
-               lon: pos.coords.longitude
-            });
-            return this.$store.dispatch("weather/getWeatherByCoords");
+            if (!this.$store.getters["weather/hasCoords"]) {
+               this.$store.dispatch("weather/saveGeoCoords", {
+                  lat: pos.coords.latitude,
+                  lon: pos.coords.longitude
+               });
+            }
+            if (!this.$store.getters["weather/isDataFetched"]) {
+               return this.$store.dispatch("weather/getWeatherByCoords");
+            }
          },
          err => {
             this.gettingLocation = false;

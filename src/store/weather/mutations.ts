@@ -2,24 +2,24 @@ import { MutationTree } from "vuex";
 import { WeatherState } from "./types";
 
 export const mutations: MutationTree<WeatherState> = {
-   resetData(state) {
+   RESET_DATA(state) {
       state.errorMsg = "";
       state.temperature = null;
       state.date = "";
       state.city = "";
       state.description = "";
    },
-   setErrorMsg(state, message: string) {
+   SET_ERROR_MSG(state, message: string) {
       state.errorMsg = message;
    },
-   setCoords(state, data: { lat: number; lon: number }) {
+   SET_COORDS(state, data: { lat: number; lon: number }) {
       state.coords.lat = data.lat;
       state.coords.lon = data.lon;
    },
-   setTemp(state, temp: number) {
+   SET_TEMP(state, temp: number) {
       state.temperature = temp;
    },
-   setDate(state) {
+   SET_DATE(state) {
       const date = new Date();
       const day = date.getDate();
       const month =
@@ -30,10 +30,17 @@ export const mutations: MutationTree<WeatherState> = {
 
       state.date = `${day}.${month}.${year}`;
    },
-   setCity(state, city: string) {
+   SET_CITY(state, city: string) {
       state.city = city;
    },
-   setDescription(state, description: string) {
+   SET_DESCRIPTION(state, description: string) {
       state.description = description;
+   },
+   TOGGLE_TEMP_UNITS(state) {
+      if (state.tempUnits === "C") {
+         state.tempUnits = "F";
+      } else {
+         state.tempUnits = "C";
+      }
    }
 };

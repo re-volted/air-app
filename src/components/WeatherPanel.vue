@@ -1,6 +1,6 @@
 <template>
-   <div v-if="weatherData" class="weather-panel">
-      <div class="weather-panel__temperature">
+   <div v-if="hasWeatherData" class="weather-panel">
+      <div @click="toggleTempUnits" class="weather-panel__temperature">
          <p>{{ temperature }}</p>
       </div>
       <div class="weather-panel__data">
@@ -14,6 +14,7 @@
             <p><span>Description:</span> {{ description }}</p>
          </div>
       </div>
+      <router-link to="/about" class="weather-panel__more">More</router-link>
    </div>
 </template>
 
@@ -26,16 +27,14 @@ export default Vue.extend({
       return {};
    },
    computed: {
-      weatherData(): boolean {
-         return !!(
-            this.$store.state.weather.temperature &&
-            this.$store.state.weather.description &&
-            this.$store.state.weather.city &&
-            this.$store.state.weather.date
-         );
+      hasWeatherData(): boolean {
+         return this.$store.getters["weather/isDataFetched"];
       },
       temperature(): string {
-         return formatTemperature(this.$store.state.weather.temperature);
+         return formatTemperature(
+            this.$store.state.weather.temperature,
+            this.$store.state.weather.tempUnits
+         );
       },
       description(): string {
          return this.$store.state.weather.description;
@@ -45,6 +44,11 @@ export default Vue.extend({
       },
       date(): string {
          return this.$store.state.weather.date;
+      }
+   },
+   methods: {
+      toggleTempUnits(): void {
+         this.$store.commit("weather/TOGGLE_TEMP_UNITS");
       }
    }
 });

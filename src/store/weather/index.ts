@@ -12,6 +12,7 @@ export const state: WeatherState = {
       lon: null
    },
    temperature: null,
+   tempUnits: "F",
    date: "",
    city: "",
    description: ""

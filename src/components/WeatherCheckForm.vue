@@ -1,21 +1,13 @@
 <template>
    <form @submit="handleSubmit" class="weather-check-form" method="get">
-      <vue-google-autocomplete
-         ref="autocomplete"
-         id="city"
-         classname="weather-check-form__input"
-         placeholder="Enter a city name..."
-         @placechanged="updateOnPlaceChange"
-      >
-      </vue-google-autocomplete>
-      <!-- <input
+      <input
          type="search"
          name="city"
          id="city"
          class="weather-check-form__input"
          placeholder="Enter a city name..."
          v-model="form.city"
-      /> -->
+      />
       <button type="submit" class="weather-check-form__btn">
          Check!
       </button>
@@ -24,7 +16,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import VueGoogleAutocomplete from "vue-google-autocomplete";
+// import VueGoogleAutocomplete from "vue-google-autocomplete";
 
 export default Vue.extend({
    name: "WeatherCheckForm",
@@ -35,9 +27,9 @@ export default Vue.extend({
          }
       };
    },
-   components: {
-      VueGoogleAutocomplete
-   },
+   // components: {
+   //    VueGoogleAutocomplete
+   // },
    computed: {
       hasCoords(): boolean {
          return (
@@ -55,10 +47,10 @@ export default Vue.extend({
                city: this.form.city
             });
 
-            if (this.$refs.autocomplete) {
-               const input = this.$refs.autocomplete as HTMLInputElement;
-               input.value = "";
-            }
+            // if (this.$refs.autocomplete) {
+            //    const input = this.$refs.autocomplete as HTMLInputElement;
+            //    input.value = "";
+            // }
 
             this.form.city = "";
             return;
@@ -72,26 +64,26 @@ export default Vue.extend({
                "Coordinates not available. Please, provide a city name."
             );
          }
-      },
-      updateOnPlaceChange(e: {
-         locality?: string;
-         latitude?: number;
-         longitude?: number;
-      }) {
-         if (e.locality) {
-            this.form.city = e.locality;
-         } else if (e.latitude && e.longitude) {
-            this.$store.dispatch("weather/setCoords", {
-               lat: e.latitude,
-               lon: e.longitude
-            });
-         } else {
-            this.$store.dispatch(
-               "setErrorMsg",
-               "Google API doesn't provide enough information about this place to fetch weather data. Please, try something else."
-            );
-         }
       }
+      // updateOnPlaceChange(e: {
+      //    locality?: string;
+      //    latitude?: number;
+      //    longitude?: number;
+      // }) {
+      //    if (e.locality) {
+      //       this.form.city = e.locality;
+      //    } else if (e.latitude && e.longitude) {
+      //       this.$store.dispatch("weather/setCoords", {
+      //          lat: e.latitude,
+      //          lon: e.longitude
+      //       });
+      //    } else {
+      //       this.$store.dispatch(
+      //          "setErrorMsg",
+      //          "Google API doesn't provide enough information about this place to fetch weather data. Please, try something else."
+      //       );
+      //    }
+      // }
    }
 });
 </script>

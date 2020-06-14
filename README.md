@@ -14,7 +14,7 @@ Any time user can look for forecast for any new city that is available in API. F
 
 App also supports two most popular temperature units: Celsius and Fahrenheit. User can toggle them by clicking on current temperature on the main page. Information about it is kept in store, so details page also formats temperature the same way. Page could be easily improved by keeping information about users choice in LocalStorage or Cookie and remember it even on page reload.
 
-Version without autocompletion for input can be found on branch `dev-no-autocomplete`.
+Version without autocompletion for input can be found on branch `dev-no-autocomplete` and [online](https://re-volted.github.io/air-app/)!
 
 ## Project setup
 

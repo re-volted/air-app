@@ -2,7 +2,7 @@ import { Module } from "vuex";
 import { getters } from "./getters";
 import { actions } from "./actions";
 import { mutations } from "./mutations";
-import { WeatherState } from "./types";
+import { WeatherState, TempUnit } from "./types";
 import { RootState } from "../types";
 
 export const state: WeatherState = {
@@ -11,7 +11,7 @@ export const state: WeatherState = {
       lon: null
    },
    temperature: null,
-   tempUnits: "C",
+   tempUnits: TempUnit.CELSIUS,
    date: "",
    city: "",
    description: "",

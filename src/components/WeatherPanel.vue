@@ -52,7 +52,7 @@ export default Vue.extend({
    },
    methods: {
       toggleTempUnits(): void {
-         this.$store.commit("weather/TOGGLE_TEMP_UNITS");
+         this.$store.dispatch("weather/toggleTempUnits");
       }
    }
 });

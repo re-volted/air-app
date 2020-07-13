@@ -21,7 +21,7 @@ export default Vue.extend({
    components: { SvgIcon },
    computed: {
       appName() {
-         return this.$store.getters["getAppName"];
+         return this.$store.getters["appName"];
       }
    }
 });

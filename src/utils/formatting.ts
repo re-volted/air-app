@@ -1,11 +1,13 @@
-function formatTemperature(temp: number, unit: "C" | "F"): string {
+import { TempUnit } from "@/store/weather/types";
+
+function formatTemperature(temp: number, unit: TempUnit): string {
    switch (unit) {
-      case "C":
+      case TempUnit.CELSIUS:
          return `${Math.round(temp)}°C`;
-      case "F":
+      case TempUnit.FAHRENHEIT:
          return `${Math.round(temp * 1.8 + 32)}°F`;
       default:
-         return "";
+         return `${Math.round(temp)}°C`;
    }
 }
 

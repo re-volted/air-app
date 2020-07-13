@@ -56,8 +56,8 @@ export default Vue.extend({
             });
 
             if (this.$refs.autocomplete) {
-               const input = this.$refs.autocomplete as VueGoogleAutocomplete;
-               input.clear();
+               const input = this.$refs.autocomplete as HTMLInputElement;
+               input.value = "";
             }
 
             this.form.city = "";
@@ -67,8 +67,8 @@ export default Vue.extend({
          if (this.hasCoords) {
             return this.$store.dispatch("weather/getWeatherByCoords");
          } else {
-            this.$store.commit(
-               "SET_ERROR_MSG",
+            this.$store.dispatch(
+               "setErrorMsg",
                "Coordinates not available. Please, provide a city name."
             );
          }
@@ -81,13 +81,13 @@ export default Vue.extend({
          if (e.locality) {
             this.form.city = e.locality;
          } else if (e.latitude && e.longitude) {
-            this.$store.commit("weather/SET_COORDS", {
+            this.$store.dispatch("weather/setCoords", {
                lat: e.latitude,
                lon: e.longitude
             });
          } else {
-            this.$store.commit(
-               "SET_ERROR_MSG",
+            this.$store.dispatch(
+               "setErrorMsg",
                "Google API doesn't provide enough information about this place to fetch weather data. Please, try something else."
             );
          }

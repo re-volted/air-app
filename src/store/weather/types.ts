@@ -12,7 +12,10 @@ export interface WeatherState {
 }
 
 type Coord = number | null;
-export type TempUnit = "C" | "F";
+export enum TempUnit {
+   CELSIUS = "C",
+   FAHRENHEIT = "F"
+}
 
 export interface ForecastDataSet {
    hour: string;

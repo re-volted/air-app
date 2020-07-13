@@ -29,17 +29,17 @@ export default Vue.extend({
    },
    mounted() {
       if (!("geolocation" in navigator)) {
-         this.$store.commit("SET_ERROR_MSG", "Geolocation not available.");
+         this.$store.dispatch("setErrorMsg", "Geolocation not available.");
          return;
       }
 
       // get position
       navigator.geolocation.getCurrentPosition(
          pos => {
-            this.$store.commit("SET_ERROR_MSG", "");
+            this.$store.dispatch("setErrorMsg", "");
 
             if (!this.$store.getters["weather/hasCoords"]) {
-               this.$store.dispatch("weather/saveGeoCoords", {
+               this.$store.dispatch("weather/setCoords", {
                   lat: pos.coords.latitude,
                   lon: pos.coords.longitude
                });
@@ -49,7 +49,7 @@ export default Vue.extend({
             }
          },
          err => {
-            this.$store.commit("SET_ERROR_MSG", err.message);
+            this.$store.dispatch("setErrorMsg", err.message);
          }
       );
    }

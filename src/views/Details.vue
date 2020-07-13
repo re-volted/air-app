@@ -38,7 +38,7 @@ export default Vue.extend({
    },
    computed: {
       appName(): string {
-         return this.$store.getters["getAppName"];
+         return this.$store.getters["appName"];
       },
       isDataFetched(): boolean {
          return this.$store.getters["weather/isDataFetched"];
